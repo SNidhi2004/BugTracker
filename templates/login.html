@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow p-4 border-0 animate__animated animate__fadeInUp">
+      <h2 class="mb-4 text-center text-primary">Welcome Back!</h2>
+      <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          {{ form.email.label(class_="form-label fw-semibold") }}
+          {{ form.email(class_="form-control", required=True, type="email", placeholder="Your email") }}
+          {% for error in form.email.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </div>
+        <div class="mb-3">
+          {{ form.password.label(class_="form-label fw-semibold") }}
+          {{ form.password(class_="form-control", required=True, type="password", placeholder="Your password") }}
+          {% for error in form.password.errors %}
+            <div class="invalid-feedback d-block">{{ error }}</div>
+          {% endfor %}
+        </div>
+        {{ form.submit(class_="btn btn-primary w-100 fw-bold") }}
+      </form>
+      <div class="text-center mt-3">
+        <span>Don't have an account? <a href="{{ url_for('register') }}" class="text-primary">Sign up</a></span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row mb-4">
+  <div class="col">
+    <h2 class="fw-bold text-primary">BugTracker+ Dashboard</h2>
+    <div class="lead mb-2 text-secondary">Welcome, {{ name }} <small>({{ role }})</small>!</div>
+    <p>Below you'll find key project stats, quick links, and your bugs.</p>
+
+    <!-- Add dashboard links here: -->
+    <a href="{{ url_for('add_bug') }}" class="btn btn-success me-2 mb-2">+ New Bug</a>
+    <a href="{{ url_for('bug_list') }}" class="btn btn-secondary mb-2">View All Bugs</a>
+  </div>
+</div>
+
+<div class="row mb-4">
+  <div class="col">
+    <h2 class="fw-bold text-primary">BugTracker+ Dashboard</h2>
+    <div class="lead mb-2 text-secondary">Welcome, {{ name }} <small>({{ role }})</small>!</div>
+    <p>Below you'll find key project stats, quick links, and your bugs.</p>
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-md-4">
+    <div class="card border-info shadow-sm">
+      <div class="card-body text-center">
+        <h5>Your Bugs</h5>
+        <p class="text-muted mb-0">Assign, resolve, or update bugs assigned to you.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card border-primary shadow-sm">
+      <div class="card-body text-center">
+        <h5>All Team Bugs</h5>
+        <p class="text-muted mb-0">View, filter, and manage all open bugs for your team.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card border-success shadow-sm">
+      <div class="card-body text-center">
+        <h5>Quick Actions</h5>
+        <a href="{{ url_for('add_bug') }}" class="btn btn-success btn-sm mt-2">+ Report New Bug</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

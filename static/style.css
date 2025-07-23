@@ -1,0 +1,92 @@
+/* style.css for BugTracker+ */
+
+/* General page styles */
+body {
+    background-color: #f6f8fb;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+.navbar-brand {
+    font-weight: bold;
+    letter-spacing: .5px;
+    color: #1557a5 !important;
+}
+
+/* Headings */
+h2 {
+    margin-top: 1rem;
+    color: #314659;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.container {
+    max-width: 700px;
+}
+
+/* Forms */
+form {
+    background: #fff;
+    padding: 2rem 2.5rem 1.5rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 18px rgba(20,43,78,0.09);
+    margin-bottom: 2.5rem;
+}
+
+.form-control, .form-select {
+    border-radius: 6px;
+    box-shadow: none;
+    border-color: #dee2e6;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-success {
+    background-color: #1557a5;
+    border-color: #1557a5;
+}
+.btn-primary:hover,
+.btn-success:hover {
+    background-color: #0c4076;
+    border-color: #0c4076;
+}
+
+.btn-outline-danger {
+    border-color: #ff5b5b;
+    color: #ff5b5b;
+}
+.btn-outline-danger:hover {
+    background-color: #ff5b5b;
+    color: #fff;
+}
+
+.btn-link {
+    color: #1557a5;
+    text-decoration: underline;
+}
+.btn-link:hover {
+    color: #0c4076;
+}
+
+/* Alerts */
+.alert-info {
+    background: #e9f3fd;
+    color: #1557a5;
+    border: none;
+    border-radius: 6px;
+}
+
+/* Cards or Dashboard panels */
+.card {
+    border-radius: 8px;
+    box-shadow: 0 1px 8px rgba(53,69,114,0.07);
+}
+
+/* Make flashed messages slightly bolder */
+.alert {
+    font-weight: 500;
+}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4 text-primary">All Bug Reports</h2>
+<table class="table table-hover shadow-sm border">
+  <thead class="table-primary">
+    <tr>
+      <th>Title</th>
+      <th>Priority</th>
+      <th>Status</th>
+      <th>Assigned To</th>
+      <th>Created By</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for bug in bugs %}
+    <tr>
+      <td>{{ bug.title }}</td>
+      <td>
+        <span class="badge 
+          {% if bug.priority == 'High' %}bg-danger
+          {% elif bug.priority == 'Medium' %}bg-warning
+          {% else %}bg-success{% endif %}">
+          {{ bug.priority }}
+        </span>
+      </td>
+      <td>
+        <span class="badge 
+          {% if bug.status == 'Open' %}bg-secondary
+          {% elif bug.status == 'In Progress' %}bg-info
+          {% else %}bg-success{% endif %}">
+          {{ bug.status }}
+        </span>
+      </td>
+      <td>{{ bug.assigned_to_name }}</td>
+      <td>{{ bug.created_by_name }}</td>
+      <td>
+        <a href="{{ url_for('update_bug', bug_id=bug._id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+        {% if current_user.role == 'Admin' %}
+        <form action="{{ url_for('delete_bug', bug_id=bug._id) }}" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="6" class="text-center text-muted">No bugs reported yet.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
