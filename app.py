@@ -7,7 +7,7 @@ from wtforms.validators import DataRequired, Email, Length, EqualTo
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, SelectField, SubmitField
+from wtforms import StringField, TextAreaField, SelectField, SubmitField , SelectMultipleField
 from wtforms.validators import DataRequired, Length
 from bson.objectid import ObjectId
 
@@ -66,6 +66,8 @@ def homepage():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
     form = RegisterForm()
     if form.validate_on_submit():
         if mongo.db.users.find_one({'email': form.email.data}):
@@ -112,10 +114,13 @@ def add_team():
         flash('Only admins may create new teams.')
         return redirect(url_for('dashboard'))
     form = TeamForm()
+    users = list(mongo.db.users.find())
+    form.members.choices = [(str(u['_id']), u['name']) for u in users] 
     if form.validate_on_submit():
         team = {
             "name": form.name.data.strip(),
             "description": form.description.data.strip()
+            [ObjectId(member_id) for member_id in form.members.data]
         }
         mongo.db.teams.insert_one(team)
         flash('Team created successfully.')
@@ -124,101 +129,6 @@ def add_team():
 
 
 
-# @app.route('/dashboard')
-# @login_required
-# def dashboard():
-#     return render_template('dashboard.html', name=current_user.name, role=current_user.role)
-
-# @app.route('/dashboard')
-# @login_required
-# def dashboard():
-#     # Find the teammates (same team as current user) or all developers as needed:
-#     team_id = getattr(current_user, 'team_id', None)
-#     if team_id:
-#         teammates = list(mongo.db.users.find({'team_id': team_id}))
-#     else:
-#         teammates = list(mongo.db.users.find({'role': 'Developer'}))
-#     teammate_names = [user['name'] for user in teammates]
-#     # Count closed/open bugs for each teammate by name
-#     open_counts = []
-#     closed_counts = []
-#     for user in teammates:
-#         open_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Open'})
-#         closed_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Closed'})
-#         open_counts.append(open_count)
-#         closed_counts.append(closed_count)
-#     return render_template(
-#         'dashboard.html',
-#         name=current_user.name,
-#         role=current_user.role,
-#         teammate_names=teammate_names,
-#         open_counts=open_counts,
-#         closed_counts=closed_counts
-#     )
-
-
-# class BugForm(FlaskForm):
-#     title = StringField('Title', validators=[DataRequired(), Length(min=3, max=200)])
-#     description = TextAreaField('Description', validators=[DataRequired()])
-#     priority = SelectField('Priority', choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')], default='Low')status = SelectField('Status', choices=[('Open', 'Open'), ('In Progress', 'In Progress'), ('Closed', 'Closed')], default='Open')
-#     assigned_to = SelectField('Assign To', coerce=str)
-#     submit = SubmitField('Submit')
-    
-
-
-# @app.route('/dashboard')
-# @login_required
-# def dashboard():
-#     if current_user.role == 'Admin':
-#         # For Admin: show team management options + all bugs summary
-#         teams = list(mongo.db.teams.find())
-#         teammates = list(mongo.db.users.find())  # all users
-#         teammate_names = [user['name'] for user in teammates]
-
-#         # Aggregate bug counts by user
-#         open_counts = []
-#         closed_counts = []
-#         for user in teammates:
-#             open_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Open'})
-#             closed_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Closed'})
-#             open_counts.append(open_count)
-#             closed_counts.append(closed_count)
-
-#         return render_template(
-#             'dashboard_admin.html',
-#             name=current_user.name,
-#             role=current_user.role,
-#             teammate_names=teammate_names,
-#             open_counts=open_counts,
-#             closed_counts=closed_counts,
-#             teams=teams
-#         )
-
-#     else:
-#         # For developers: show own bugs & team bugs
-#         team_id = getattr(current_user, 'team_id', None)
-#         if team_id:
-#             teammates = list(mongo.db.users.find({'team_id': team_id}))
-#         else:
-#             teammates = list(mongo.db.users.find({'role': 'Developer'}))
-#         teammate_names = [user['name'] for user in teammates]
-
-#         open_counts = []
-#         closed_counts = []
-#         for user in teammates:
-#             open_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Open'})
-#             closed_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Closed'})
-#             open_counts.append(open_count)
-#             closed_counts.append(closed_count)
-
-#         return render_template(
-#             'dashboard_dev.html',
-#             name=current_user.name,
-#             role=current_user.role,
-#             teammate_names=teammate_names,
-#             open_counts=open_counts,
-#             closed_counts=closed_counts
-#         )
 
 
 
@@ -291,6 +201,7 @@ class BugForm(FlaskForm):
 class TeamForm(FlaskForm):
     name = StringField('Team Name', validators=[DataRequired(), Length(max=100)])
     description = TextAreaField('Description', validators=[Length(max=500)])
+    members = SelectMultipleField('Team Members', coerce=str) 
     submit = SubmitField('Create Team')
 
 def get_user_name(user_id):
