@@ -123,10 +123,39 @@ def add_team():
     return render_template('add_team.html', form=form)
 
 
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    return render_template('dashboard.html', name=current_user.name, role=current_user.role)
+
+# @app.route('/dashboard')
+# @login_required
+# def dashboard():
+#     return render_template('dashboard.html', name=current_user.name, role=current_user.role)
+
+# @app.route('/dashboard')
+# @login_required
+# def dashboard():
+#     # Find the teammates (same team as current user) or all developers as needed:
+#     team_id = getattr(current_user, 'team_id', None)
+#     if team_id:
+#         teammates = list(mongo.db.users.find({'team_id': team_id}))
+#     else:
+#         teammates = list(mongo.db.users.find({'role': 'Developer'}))
+#     teammate_names = [user['name'] for user in teammates]
+#     # Count closed/open bugs for each teammate by name
+#     open_counts = []
+#     closed_counts = []
+#     for user in teammates:
+#         open_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Open'})
+#         closed_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Closed'})
+#         open_counts.append(open_count)
+#         closed_counts.append(closed_count)
+#     return render_template(
+#         'dashboard.html',
+#         name=current_user.name,
+#         role=current_user.role,
+#         teammate_names=teammate_names,
+#         open_counts=open_counts,
+#         closed_counts=closed_counts
+#     )
+
 
 # class BugForm(FlaskForm):
 #     title = StringField('Title', validators=[DataRequired(), Length(min=3, max=200)])
@@ -135,6 +164,120 @@ def dashboard():
 #     assigned_to = SelectField('Assign To', coerce=str)
 #     submit = SubmitField('Submit')
     
+
+
+# @app.route('/dashboard')
+# @login_required
+# def dashboard():
+#     if current_user.role == 'Admin':
+#         # For Admin: show team management options + all bugs summary
+#         teams = list(mongo.db.teams.find())
+#         teammates = list(mongo.db.users.find())  # all users
+#         teammate_names = [user['name'] for user in teammates]
+
+#         # Aggregate bug counts by user
+#         open_counts = []
+#         closed_counts = []
+#         for user in teammates:
+#             open_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Open'})
+#             closed_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Closed'})
+#             open_counts.append(open_count)
+#             closed_counts.append(closed_count)
+
+#         return render_template(
+#             'dashboard_admin.html',
+#             name=current_user.name,
+#             role=current_user.role,
+#             teammate_names=teammate_names,
+#             open_counts=open_counts,
+#             closed_counts=closed_counts,
+#             teams=teams
+#         )
+
+#     else:
+#         # For developers: show own bugs & team bugs
+#         team_id = getattr(current_user, 'team_id', None)
+#         if team_id:
+#             teammates = list(mongo.db.users.find({'team_id': team_id}))
+#         else:
+#             teammates = list(mongo.db.users.find({'role': 'Developer'}))
+#         teammate_names = [user['name'] for user in teammates]
+
+#         open_counts = []
+#         closed_counts = []
+#         for user in teammates:
+#             open_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Open'})
+#             closed_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Closed'})
+#             open_counts.append(open_count)
+#             closed_counts.append(closed_count)
+
+#         return render_template(
+#             'dashboard_dev.html',
+#             name=current_user.name,
+#             role=current_user.role,
+#             teammate_names=teammate_names,
+#             open_counts=open_counts,
+#             closed_counts=closed_counts
+#         )
+
+
+
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    if current_user.role == 'Admin':
+        # For Admin: show team management options + all bugs summary
+        teams = list(mongo.db.teams.find())
+        teammates = list(mongo.db.users.find())  # all users
+        teammate_names = [user['name'] for user in teammates]
+
+        # Aggregate bug counts by user
+        open_counts = []
+        closed_counts = []
+        for user in teammates:
+            open_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Open'})
+            closed_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Closed'})
+            open_counts.append(open_count)
+            closed_counts.append(closed_count)
+
+        return render_template(
+            'dashboard_admin.html',
+            name=current_user.name,
+            role=current_user.role,
+            teammate_names=teammate_names,
+            open_counts=open_counts,
+            closed_counts=closed_counts,
+            teams=teams
+        )
+
+    else:
+        # For developers: show own bugs & team bugs
+        team_id = getattr(current_user, 'team_id', None)
+        if team_id:
+            teammates = list(mongo.db.users.find({'team_id': team_id}))
+        else:
+            teammates = list(mongo.db.users.find({'role': 'Developer'}))
+        teammate_names = [user['name'] for user in teammates]
+
+        open_counts = []
+        closed_counts = []
+        for user in teammates:
+            open_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Open'})
+            closed_count = mongo.db.bugs.count_documents({'assigned_name': user['name'], 'status': 'Closed'})
+            open_counts.append(open_count)
+            closed_counts.append(closed_count)
+
+        return render_template(
+            'dashboard_dev.html',
+            name=current_user.name,
+            role=current_user.role,
+            teammate_names=teammate_names,
+            open_counts=open_counts,
+            closed_counts=closed_counts
+        )
+
+
 class BugForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(min=3, max=200)])
     description = TextAreaField('Description', validators=[DataRequired()])
