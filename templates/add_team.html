@@ -1,43 +1,31 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-lg-7 col-md-8">
-    <div class="card shadow-sm p-4 mt-4">
-      <h2 class="mb-4 text-center text-primary">Create a New Team</h2>
-      <form method="POST" novalidate>
-        {{ form.hidden_tag() }}
-
-        <div class="mb-3">
-          {{ form.name.label(class_="form-label fw-semibold") }}
-          {{ form.name(class_="form-control", placeholder="Team Name", required=True) }}
-          {% for error in form.name.errors %}
-            <div class="text-danger">{{ error }}</div>
-          {% endfor %}
-        </div>
-
-        <div class="mb-3">
-          {{ form.description.label(class_="form-label") }}
-          {{ form.description(class_="form-control", rows=3, placeholder="Short description (optional)") }}
-          {% for error in form.description.errors %}
-            <div class="text-danger">{{ error }}</div>
-          {% endfor %}
-        </div>
-
-        <div class="mb-3">
-            {{ form.members.label(class_="form-label fw-semibold") }}
-            {{ form.members(class_="form-select", multiple=True) }}
-            {% for error in form.members.errors %}
-                <div class="text-danger">{{ error }}</div>
-            {% endfor %}
-        </div>
-
-        {{ form.submit(class_="btn btn-success w-100 fw-bold") }}
-
-        <div class="text-center mt-3">
-          <a href="{{ url_for('dashboard') }}" class="btn btn-link">Back to Dashboard</a>
-        </div>
-      </form>
-    </div>
+<h2>Create a Team</h2>
+<form method="POST" novalidate>
+  {{ form.hidden_tag() }}
+  <div class="mb-3">
+    {{ form.name.label(class_="form-label") }}
+    {{ form.name(class_="form-control") }}
+    {% for error in form.name.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
   </div>
+  <div class="mb-3">
+    {{ form.description.label(class_="form-label") }}
+    {{ form.description(class_="form-control", rows=3) }}
+    {% for error in form.description.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+  </div>
+  <div class="mb-3">
+    {{ form.members.label(class_="form-label") }}
+    {{ form.members(class_="form-select", multiple=True, size=6) }}
+    {% for error in form.members.errors %}<small class="text-danger">{{ error }}</small>{% endfor %}
+  </div>
+  <div class="mb-3">
+  {{ form.bugs.label(class_="form-label") }}
+  {{ form.bugs(class_="form-select", multiple=True, size=8) }}
+  {% for error in form.bugs.errors %}
+  <div class="text-danger">{{ error }}</div>
+  {% endfor %}
 </div>
+  {{ form.submit(class_="btn btn-primary") }}
+  <a href="{{ url_for('dashboard') }}" class="btn btn-link ms-2">Cancel</a>
+</form>
 {% endblock %}

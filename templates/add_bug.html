@@ -1,34 +1,29 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-lg-8">
-    <div class="card shadow-sm p-4 border-0">
-      <h2 class="mb-3 text-center text-primary">Report a Bug</h2>
-      <form method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        <div class="row g-3">
-          <div class="col-md-6 mb-3">
-            {{ form.title.label(class_="form-label fw-semibold") }}
-            {{ form.title(class_="form-control", required=True, placeholder="Short bug title") }}
-          </div>
-          <div class="col-md-6 mb-3">
-            {{ form.priority.label(class_="form-label fw-semibold") }}
-            {{ form.priority(class_="form-select", required=True) }}
-          </div>
-        </div>
-        <div class="mb-3">
-          {{ form.description.label(class_="form-label fw-semibold") }}
-          {{ form.description(class_="form-control", required=True, rows=3, placeholder="Describe the issue clearly") }}
-        </div>
-        <div class="row g-3">
-          <div class="col-md-6 mb-3">
-            {{ form.assigned_to.label(class_="form-label") }}
-            {{ form.assigned_to(class_="form-select") }}
-          </div>
-        </div>
-        {{ form.submit(class_="btn btn-success w-100 fw-bold") }}
-      </form>
-    </div>
+<h2>Report a New Bug</h2>
+<form method="POST" novalidate>
+  {{ form.hidden_tag() }}
+  <div class="mb-3">
+    {{ form.title.label(class_="form-label") }}
+    {{ form.title(class_="form-control") }}
   </div>
-</div>
+  <div class="mb-3">
+    {{ form.description.label(class_="form-label") }}
+    {{ form.description(class_="form-control", rows=3) }}
+  </div>
+  <div class="mb-3">
+    {{ form.priority.label(class_="form-label") }}
+    {{ form.priority(class_="form-select") }}
+  </div>
+  <div class="mb-3">
+  {{ form.assigned_to.label(class_="form-label") }}
+  {{ form.assigned_to(class_="form-select") }}
+  </div>
+  <div class="mb-3">
+    {{ form.team.label(class_="form-label") }}
+    {{ form.team(class_="form-select") }}
+  </div>
+  {{ form.submit(class_="btn btn-success") }}
+  <a href="{{ url_for('dashboard') }}" class="btn btn-link ms-2">Cancel</a>
+</form>
 {% endblock %}

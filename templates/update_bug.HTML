@@ -1,38 +1,55 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-lg-8">
-    <div class="card p-4 shadow-sm">
-      <h2 class="mb-3 text-center text-primary">Update Bug</h2>
-      <form method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        <div class="row g-3">
-          <div class="col-md-6 mb-3">
-            {{ form.title.label(class_="form-label fw-semibold") }}
-            {{ form.title(class_="form-control", required=True) }}
-          </div>
-          <div class="col-md-6 mb-3">
-            {{ form.priority.label(class_="form-label fw-semibold") }}
-            {{ form.priority(class_="form-select", required=True) }}
-          </div>
-        </div>
-        <div class="mb-3">
-          {{ form.description.label(class_="form-label fw-semibold") }}
-          {{ form.description(class_="form-control", rows=3, required=True) }}
-        </div>
-        <div class="row g-3">
-          <div class="col-md-6 mb-3">
-            {{ form.status.label(class_="form-label fw-semibold") }}
-            {{ form.status(class_="form-select", required=True) }}
-          </div>
-          <div class="col-md-6 mb-3">
-            {{ form.assigned_to.label(class_="form-label") }}
-            {{ form.assigned_to(class_="form-select") }}
-          </div>
-        </div>
-        {{ form.submit(class_="btn btn-success w-100 fw-bold") }}
-      </form>
-    </div>
+<h2>Update Bug</h2>
+<form method="POST" novalidate>
+  {{ form.hidden_tag() }}
+
+  <div class="mb-3">
+    {{ form.title.label(class_="form-label") }}
+    {{ form.title(class_="form-control") }}
   </div>
-</div>
+
+  <div class="mb-3">
+    {{ form.description.label(class_="form-label") }}
+    {{ form.description(class_="form-control", rows=3) }}
+  </div>
+
+  <div class="mb-3">
+    {{ form.priority.label(class_="form-label") }}
+    {{ form.priority(class_="form-select") }}
+  </div>
+
+  {% if current_user.role == 'Admin' %}
+    <div class="mb-3">
+    {{ form.assigned_to.label(class_="form-label") }}
+    {{ form.assigned_to(class_="form-select") }}
+    </div>
+
+    <div class="mb-3">
+      {{ form.status.label(class_="form-label") }}
+      {{ form.status(class_="form-select") }}
+    </div>
+    
+    <div class="mb-3">
+      {{ form.team.label(class_="form-label") }}
+      {{ form.team(class_="form-select") }}
+    </div>
+  {% else %}
+    <div class="mb-3">
+      <label class="form-label">Assigned To</label>
+      <input type="text" class="form-control" value="{{ form.assigned_name.data }}" readonly>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Status</label>
+      <input type="text" class="form-control" value="{{ form.status.data }}" readonly>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Team</label>
+      <input type="text" class="form-control" value="{{ selected_team_name }}" readonly>
+    </div>
+  {% endif %}
+
+  {{ form.submit(class_="btn btn-primary") }}
+  <a href="{{ url_for('bug_list') }}" class="btn btn-link ms-2">Cancel</a>
+</form>
 {% endblock %}
