@@ -10,7 +10,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'devsecretkey'  # Replace with env variable in production
-app.config['MONGO_URI'] = 'mongodb+srv://bugtrackeruser:bugtrackeruser1234@myatlasclusteredu.fuxls.mongodb.net/?retryWrites=true&w=majority&appName=myAtlasClusterEDU'
+app.config['MONGO_URI'] = 'mongodb+srv://bugtrackeruser:bugtrackeruser1234@myatlasclusteredu.fuxls.mongodb.net/bugtracker?retryWrites=true&w=majority&appName=myAtlasClusterEDU'
 
 mongo = PyMongo(app)
 bcrypt = Bcrypt(app)
