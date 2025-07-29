@@ -26,13 +26,15 @@ RESTful API structure and modular codebase
 
 🚀 How to Run Locally
 
-1.Clone the repo
+1.**Clone the repo**  
+   ```bash
 
 git clone https://github.com/SNidhi2004/BugTracker.git
 
 cd BugTracker
 
-2.Create virtual environment & install requirements
+2.**Create virtual environment & install requirements**  
+   ```bash
 
 python -m venv venv
 
