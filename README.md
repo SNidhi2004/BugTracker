@@ -2,7 +2,9 @@
 BugTracker+ is a lightweight, full-stack bug tracking system designed for internal software teams to report, update, and manage issues efficiently.
 
 🌐 Live Demo
+```bash
 👉 https://bugtracker-4qzo.onrender.com
+```
 
 🛠 Tech Stack
 Frontend: HTML, Bootstrap
@@ -10,19 +12,15 @@ Backend: Flask (Python)
 Database: MongoDB (Atlas)
 Hosting: Render
 
-🔐 Features
+## 🔐 Features
 
-Secure Login/Registration (admin & developer roles)
+- Secure Login/Registration (admin & developer roles)
+- Role-based access:
+  - Admins can delete bugs
+  - Developers can update bug status
+- Filter bugs by status (Open / In Progress / Resolved)
+- RESTful API structure and modular codebase
 
-Role-based access
-
-  Admins can delete bugs
-  
-  Developers can update bug status
-  
-Filter bugs by status (Open/In Progress/Resolved)
-
-RESTful API structure and modular codebase
 
 🚀 How to Run Locally
 ##  How to Run
