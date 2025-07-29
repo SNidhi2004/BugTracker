@@ -25,33 +25,29 @@ Filter bugs by status (Open/In Progress/Resolved)
 RESTful API structure and modular codebase
 
 🚀 How to Run Locally
+##  How to Run
 
-1.**Clone the repo**  
+1. **Clone the repo**  
    ```bash
+   git clone https://github.com/SNidhi2004/Emotion-based-Song-Recommender.git
+   cd Emotion-based-Song-Recommender
 
-git clone https://github.com/SNidhi2004/BugTracker.git
-
-cd BugTracker
-
-2.**Create virtual environment & install requirements**  
+2. **Create virtual environment & install requirements**
    ```bash
+   python -m venv venv
+   venv\Scripts\activate   # or source venv/bin/activate on Linux/Mac
+   pip install -r requirements.txt
 
-python -m venv venv
 
-venv\Scripts\activate   # or source venv/bin/activate on Linux/Mac
+3. **Configure MongoDB**
+   Create a .env file and add your Mongo URI:
+   ```bash
+   MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/bugtracker
+   SECRET_KEY=your_secret_key
 
-pip install -r requirements.txt
-
-3.Configure MongoDB
-
-Create a .env file and add your Mongo URI:
-
-MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/bugtracker
-
-SECRET_KEY=your_secret_key
-
-4.Run the app
-
-python app.py
+4 **Run the app**
+  ```bash
+  python app/app.py
+  ```
 
 Then open http://localhost:5000
