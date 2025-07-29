@@ -292,9 +292,21 @@ def update_bug(bug_id):
         flash('Bug not found.', 'warning')
         return redirect(url_for('bug_list'))
 
-    form = BugForm(data=bug)
+    # Populate teams and users for form choices
     teams = list(mongo.db.teams.find())
+    users = list(mongo.db.users.find())
+
+    form = BugForm(data=bug)  # initialize with bug data
+
     form.team.choices = [('', '-- No Team --')] + [(str(t['_id']), t['name']) for t in teams]
+    form.assigned_to.choices = [('', '-- Unassigned --')] + [(str(u['_id']), u['name']) for u in users]
+
+    # Pre-fill assigned_to data if bug has assigned user
+    if request.method == 'GET':
+        if bug.get('assigned_to'):
+            form.assigned_to.data = str(bug.get('assigned_to'))
+        else:
+            form.assigned_to.data = ''
 
     # Compute selected team name for display (read-only in template)
     selected_team_name = ''
@@ -304,9 +316,9 @@ def update_bug(bug_id):
                 selected_team_name = label
                 break
 
-    # Only admin can change assigned_name, status, or team
+    # Restrict non-admin fields
     if current_user.role != 'Admin':
-        form.assigned_name.render_kw = {'readonly': True}
+        form.assigned_to.render_kw = {'disabled': True}
         form.status.render_kw = {'disabled': True}
         form.team.render_kw = {'disabled': True}
 
@@ -318,7 +330,7 @@ def update_bug(bug_id):
         }
         if current_user.role == 'Admin':
             update_data.update({
-                'assigned_name': form.assigned_name.data.strip(),
+                'assigned_to': form.assigned_to.data if form.assigned_to.data else None,
                 'status': form.status.data,
                 'team_id': form.team.data if form.team.data else None
             })
@@ -326,7 +338,18 @@ def update_bug(bug_id):
         flash('Bug updated successfully.', 'success')
         return redirect(url_for('bug_list'))
 
-    return render_template('update_bug.html', form=form, selected_team_name=selected_team_name)
+    # Compute assigned_to user display name for non-admin display
+    assigned_to_name = 'Unassigned'
+    if form.assigned_to.data:
+        assigned_to_name = dict(form.assigned_to.choices).get(form.assigned_to.data, 'Unassigned')
+
+    return render_template(
+        'update_bug.html',
+        form=form,
+        selected_team_name=selected_team_name,
+        assigned_to_name=assigned_to_name
+    )
+
 
 @app.route('/delete_bug/<bug_id>', methods=['POST'])
 @login_required

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <h2>Update Bug</h2>
+
 <form method="POST" novalidate>
   {{ form.hidden_tag() }}
 
@@ -21,28 +22,31 @@
 
   {% if current_user.role == 'Admin' %}
     <div class="mb-3">
-    {{ form.assigned_to.label(class_="form-label") }}
-    {{ form.assigned_to(class_="form-select") }}
+      {{ form.assigned_to.label(class_="form-label") }}
+      {{ form.assigned_to(class_="form-select") }}
     </div>
 
     <div class="mb-3">
       {{ form.status.label(class_="form-label") }}
       {{ form.status(class_="form-select") }}
     </div>
-    
+
     <div class="mb-3">
       {{ form.team.label(class_="form-label") }}
       {{ form.team(class_="form-select") }}
     </div>
+
   {% else %}
     <div class="mb-3">
       <label class="form-label">Assigned To</label>
-      <input type="text" class="form-control" value="{{ form.assigned_name.data }}" readonly>
+      <input type="text" class="form-control" value="{{ assigned_to_name }}" readonly>
     </div>
+
     <div class="mb-3">
       <label class="form-label">Status</label>
       <input type="text" class="form-control" value="{{ form.status.data }}" readonly>
     </div>
+
     <div class="mb-3">
       <label class="form-label">Team</label>
       <input type="text" class="form-control" value="{{ selected_team_name }}" readonly>
