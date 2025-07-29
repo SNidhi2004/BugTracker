@@ -19,8 +19,6 @@ Filter bugs by status (Open/In Progress/Resolved)
 RESTful API structure and modular codebase
 
 🚀 How to Run Locally
-<img width="846" height="190" alt="image" src="https://github.com/user-attachments/assets/541f2a2f-372c-47bc-9db9-5fff37d57689" />
-
 1.Clone the repo
 git clone https://github.com/SNidhi2004/BugTracker.git
 cd BugTracker
